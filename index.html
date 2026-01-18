@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0A0A0F" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Loopy - Private Transactions on Solana | ZK Privacy Wallet</title>
+    <meta name="title" content="Loopy - Private Transactions on Solana | ZK Privacy Wallet" />
+    <meta name="description" content="Shield your SOL with zero-knowledge proofs. Loopy is the #1 privacy toolkit for Solana - send anonymously, break on-chain links, and protect your wallet balance. Non-custodial ZK privacy protocol." />
+    <meta name="keywords" content="solana privacy, private solana wallet, solana zk, zero knowledge solana, anonymous solana transactions, solana mixer, privacy cash, privacycash, radr, shadow pay, shadowpay, solana anonymous, hide solana balance, private sol transfer, solana privacy protocol, zk proofs solana, solana shielded wallet, private defi solana, solana confidential transactions, break chain solana, untraceable solana, solana tumbler, private swap solana, loopy finance, loopy cash, solana stealth, encrypted solana, dark pool solana" />
+    <meta name="author" content="Loopy" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://loopy.cash" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://loopy.cash/" />
+    <meta property="og:title" content="Loopy - Private Transactions on Solana | ZK Privacy Wallet" />
+    <meta property="og:description" content="Shield your SOL with zero-knowledge proofs. The #1 privacy toolkit for Solana - send anonymously, break on-chain links, protect your balance." />
+    <meta property="og:image" content="https://loopy.cash/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Loopy" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://loopy.cash/" />
+    <meta name="twitter:title" content="Loopy - Private Transactions on Solana" />
+    <meta name="twitter:description" content="Shield your SOL with ZK proofs. Send anonymously. Break the chain. The privacy toolkit for Solana." />
+    <meta name="twitter:image" content="https://loopy.cash/og-image.png" />
+    <meta name="twitter:site" content="@loopy_cash" />
+    <meta name="twitter:creator" content="@loopy_cash" />
+    
+    <!-- Additional SEO -->
+    <meta name="application-name" content="Loopy" />
+    <meta name="apple-mobile-web-app-title" content="Loopy" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Structured Data for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Loopy",
+      "description": "Private transactions on Solana using zero-knowledge proofs. Shield your SOL, send anonymously, and break on-chain links.",
+      "url": "https://loopy.cash",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "100"
+      }
+    }
+    </script>
+    
+    <!-- Prevent white flash before React loads -->
+    <style>
+      html, body, #root {
+        background-color: #0A0A0F;
+        background: linear-gradient(160deg, #14141f 0%, #0e0e14 40%, #10101a 70%, #151520 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" as="image" crossorigin />
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+    <link rel="dns-prefetch" href="https://api.solana.fm" />
+    <link rel="dns-prefetch" href="https://api.mainnet-beta.solana.com" />
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <!-- ShadowPay ZK Payment Scripts (loaded before React for global availability) -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://unpkg.com/snarkjs@latest/build/snarkjs.min.js"></script>
+    <script src="https://shadow.radr.fun/shadowpay/shadowpay-client.js"></script>
+    
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

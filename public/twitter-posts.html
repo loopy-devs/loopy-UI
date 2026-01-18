@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loopy Twitter Posts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      align-items: center;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .caption {
+      color: #888;
+      font-size: 14px;
+      max-width: 600px;
+      text-align: left;
+      background: #111;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+    }
+
+    .post-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Base banner template */
+    .banner {
+      width: 1080px;
+      height: 1080px;
+      background: linear-gradient(160deg, #0a0a0f 0%, #0d0d16 50%, #080810 100%);
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    /* Background elements - consistent across all */
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+    }
+
+    .bg-orb-1 {
+      width: 600px;
+      height: 600px;
+      background: rgba(45, 91, 255, 0.12);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .bg-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(6, 182, 212, 0.06);
+      bottom: -100px;
+      right: -100px;
+    }
+
+    .bg-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(45, 91, 255, 0.08);
+      bottom: 200px;
+      left: -100px;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.025;
+      background-image: radial-gradient(rgba(45, 91, 255, 0.8) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Header - Logo always top left */
+    .header {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      right: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-section img {
+      width: 60px;
+      height: 60px;
+    }
+
+    .logo-section span {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+
+    .badge {
+      padding: 10px 20px;
+      background: rgba(45, 91, 255, 0.1);
+      border: 1px solid rgba(45, 91, 255, 0.2);
+      border-radius: 100px;
+      color: #2D5BFF;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Main content area - center */
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      width: 100%;
+      padding: 0 80px;
+    }
+
+    .content-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 40px;
+      background: linear-gradient(135deg, rgba(45, 91, 255, 0.2), rgba(45, 91, 255, 0.05));
+      border: 1px solid rgba(45, 91, 255, 0.3);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content-icon svg {
+      width: 60px;
+      height: 60px;
+      color: #2D5BFF;
+    }
+
+    .content h1 {
+      font-size: 72px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -2px;
+    }
+
+    .content h1 span {
+      color: #2D5BFF;
+    }
+
+    .content p {
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .content .highlight {
+      display: inline-block;
+      margin-top: 40px;
+      padding: 20px 40px;
+      background: linear-gradient(135deg, #2D5BFF, #1e40af);
+      border-radius: 16px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 10px 40px rgba(45, 91, 255, 0.3);
+    }
+
+    .content .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 50px;
+    }
+
+    .content .stat {
+      text-align: center;
+    }
+
+    .content .stat-value {
+      font-size: 56px;
+      font-weight: 900;
+      color: #2D5BFF;
+    }
+
+    .content .stat-label {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 8px;
+    }
+
+    /* Footer - always bottom */
+    .footer {
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+      right: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 18px;
+    }
+
+    .footer-left svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .footer-right {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    /* Special styles */
+    .glow-text {
+      text-shadow: 0 0 60px rgba(45, 91, 255, 0.5);
+    }
+
+    .prize-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 48px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+      border: 2px solid rgba(16, 185, 129, 0.4);
+      border-radius: 20px;
+      margin-top: 40px;
+    }
+
+    .prize-box .amount {
+      font-size: 48px;
+      font-weight: 900;
+      color: #10B981;
+    }
+
+    .prize-box .label {
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: left;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 40px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      background: rgba(45, 91, 255, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #2D5BFF;
+      font-size: 18px;
+    }
+
+    .step-text {
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- POST 1: COMING SOON -->
+  <div class="post-container">
+    <h2>1. Coming Soon Post</h2>
+    <div class="banner">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+      
+      <div class="header">
+        <div class="logo-section">
+          <img src="logo.svg" alt="Loopy" />
+          <span>Loopy</span>
+        </div>
+        <div class="badge">Coming Soon</div>
+      </div>
+
+      <div class="content">
+        <div class="content-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h1>Privacy is <span>Coming</span></h1>
+        <p>Shield your SOL. Break the chain. Send anonymously. The privacy toolkit for Solana.</p>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Powered by ZK Proofs
+        </div>
+        <div class="footer-right">loopy.cash</div>
+      </div>
+    </div>
+    <div class="caption">🛡️ Something private is coming to Solana...
+
+Your balance is public. Your transactions are tracked. Everyone can see everything.
+
+That changes soon.
+
+Loopy — the privacy toolkit for Solana:
+→ Shield your SOL with ZK proofs
+→ Break on-chain links
+→ Send anonymously
+
+Privacy isn't about hiding. It's about control.
+
+Follow for launch updates 👀
+
+#Solana #Privacy #ZK #DeFi</div>
+  </div>
+
+  <!-- POST 2: LAUNCH -->
+  <div class="post-container">
+    <h2>2. Launch Post</h2>
+    <div class="banner">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+      
+      <div class="header">
+        <div class="logo-section">
+          <img src="logo.svg" alt="Loopy" />
+          <span>Loopy</span>
+        </div>
+        <div class="badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #10B981;">🚀 Live Now</div>
+      </div>
+
+      <div class="content">
+        <h1 class="glow-text">We're <span>Live</span></h1>
+        <p>The most private way to transact on Solana is here.</p>
+        <div class="highlight">Try it now → loopy.cash</div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Powered by ZK Proofs
+        </div>
+        <div class="footer-right">Built on Solana</div>
+      </div>
+    </div>
+    <div class="caption">🚀 Loopy is LIVE!
+
+The privacy toolkit for Solana is here.
+
+✅ Shield your SOL into a ZK privacy pool
+✅ Break the on-chain link between deposits & withdrawals  
+✅ Send to any wallet anonymously
+✅ Non-custodial — you always control your keys
+
+Your balance. Your business. Nobody else's.
+
+👉 Try it now: loopy.cash
+
+RT to spread privacy 🔒
+
+#Solana #Privacy #ZK #Crypto #DeFi</div>
+  </div>
+
+  <!-- POST 3: REFERRAL PROGRAM -->
+  <div class="post-container">
+    <h2>3. Referral Program</h2>
+    <div class="banner">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+      
+      <div class="header">
+        <div class="logo-section">
+          <img src="logo.svg" alt="Loopy" />
+          <span>Loopy</span>
+        </div>
+        <div class="badge">🎁 Referral Program</div>
+      </div>
+
+      <div class="content">
+        <h1>Earn <span>$LOOPY</span></h1>
+        <p>Refer friends. Stack points. Get the airdrop.</p>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-value">+50</div>
+            <div class="stat-label">Points per referral</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">∞</div>
+            <div class="stat-label">No limit</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Early users = Airdrop eligible
+        </div>
+        <div class="footer-right">loopy.cash</div>
+      </div>
+    </div>
+    <div class="caption">🎁 Loopy Referral Program is LIVE
+
+Earn points. Get the $LOOPY airdrop.
+
+Here's how it works:
+
+1️⃣ Connect your wallet at loopy.cash
+2️⃣ Get your unique referral code
+3️⃣ Share it with friends
+4️⃣ Earn +50 points for every signup
+
+No limit on referrals. Stack those points. 📈
+
+Early users will be eligible for the $LOOPY token airdrop when we launch.
+
+The more points = the bigger your allocation.
+
+Start referring 👉 loopy.cash
+
+#Airdrop #Solana #Crypto #DeFi</div>
+  </div>
+
+  <!-- POST 4: SHIELD CONTEST -->
+  <div class="post-container">
+    <h2>4. $10 Airdrop Contest</h2>
+    <div class="banner">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+      
+      <div class="header">
+        <div class="logo-section">
+          <img src="logo.svg" alt="Loopy" />
+          <span>Loopy</span>
+        </div>
+        <div class="badge" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #10B981;">💰 Giveaway</div>
+      </div>
+
+      <div class="content">
+        <h1><span>$10</span> Airdrop</h1>
+        <p>To 10 users who shield SOL on Loopy</p>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Shield any amount of SOL on Loopy</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Screenshot your shielded balance</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Reply with proof + your wallet</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          10 winners • $10 each
+        </div>
+        <div class="footer-right">loopy.cash</div>
+      </div>
+    </div>
+    <div class="caption">💰 $100 GIVEAWAY — 10 Winners!
+
+We're giving $10 to 10 people who try Loopy.
+
+How to enter:
+
+1️⃣ Go to loopy.cash
+2️⃣ Connect wallet & shield any amount of SOL
+3️⃣ Screenshot your shielded balance
+4️⃣ Reply to this post with:
+   • Screenshot proof
+   • Your SOL wallet address
+
+That's it! 
+
+10 random participants will receive $10 each.
+
+Ends in 48 hours ⏰
+
+Go try the most private way to hold SOL 🛡️
+
+#Giveaway #Solana #Airdrop #Crypto</div>
+  </div>
+
+  <p style="color: #666; margin-top: 40px; text-align: center; font-size: 14px;">
+    Right-click each banner → Save Image As... or screenshot each one (1080 x 1080px)
+  </p>
+
+</body>
+</html>

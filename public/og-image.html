@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loopy OG Image</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .og-image {
+      width: 1200px;
+      height: 1200px;
+      background: linear-gradient(160deg, #0a0a0f 0%, #0d0d16 50%, #080810 100%);
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    /* Background elements */
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+
+    .bg-orb-1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(45, 91, 255, 0.15);
+      top: -150px;
+      left: -100px;
+    }
+
+    .bg-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(6, 182, 212, 0.08);
+      bottom: -100px;
+      right: -50px;
+    }
+
+    .bg-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: rgba(45, 91, 255, 0.1);
+      top: 50%;
+      right: 20%;
+      transform: translateY(-50%);
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: radial-gradient(rgba(45, 91, 255, 0.8) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    /* Shield watermark */
+    .shield-watermark {
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 320px;
+      height: 320px;
+      opacity: 0.06;
+    }
+
+    .shield-watermark svg {
+      width: 100%;
+      height: 100%;
+      stroke: #2D5BFF;
+      stroke-width: 1;
+      fill: none;
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 80px;
+    }
+
+    /* Logo section */
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .logo-section img {
+      width: 70px;
+      height: 70px;
+    }
+
+    .brand-name {
+      font-size: 42px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+
+    /* Headline */
+    h1 {
+      font-size: 72px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      max-width: 700px;
+    }
+
+    h1 span {
+      color: #2D5BFF;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 600px;
+      line-height: 1.5;
+      margin-bottom: 40px;
+    }
+
+    /* Features row */
+    .features {
+      display: flex;
+      gap: 32px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      color: #2D5BFF;
+    }
+
+    .feature-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    /* Badge */
+    .badge {
+      position: absolute;
+      top: 40px;
+      right: 60px;
+      padding: 10px 20px;
+      background: rgba(45, 91, 255, 0.1);
+      border: 1px solid rgba(45, 91, 255, 0.2);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2D5BFF;
+      z-index: 10;
+    }
+
+    /* URL */
+    .url {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 10;
+    }
+
+    .instructions {
+      color: #666;
+      margin-top: 30px;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="og-image">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+
+      <!-- Shield watermark -->
+      <div class="shield-watermark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+
+      <!-- Badge -->
+      <div class="badge">Built on Solana</div>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="logo-section">
+          <img src="logo.svg" alt="Loopy" />
+          <span class="brand-name">Loopy</span>
+        </div>
+
+        <h1>Private Transactions on <span>Solana</span></h1>
+        
+        <p class="tagline">
+          Shield your SOL with zero-knowledge proofs. Send anonymously. Break on-chain links.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span class="feature-text">ZK Shielding</span>
+          </div>
+          <div class="feature">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 11h1a3 3 0 0 1 0 6h-1"/>
+              <path d="M9 12v6"/>
+              <path d="M13 12v6"/>
+              <path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 2 11 2s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/>
+            </svg>
+            <span class="feature-text">Anonymous Sends</span>
+          </div>
+          <div class="feature">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="m4.9 4.9 14.2 14.2"/>
+            </svg>
+            <span class="feature-text">Break the Chain</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- URL -->
+      <div class="url">loopy.cash</div>
+    </div>
+
+    <p class="instructions">
+      Right-click → Save Image As... or take a screenshot (1200 × 1200px square)<br>
+      Save as <strong>og-image.png</strong> in the /public folder
+    </p>
+  </div>
+</body>
+</html>

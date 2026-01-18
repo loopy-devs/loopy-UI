@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="loopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F7AFF"/>
+      <stop offset="50%" style="stop-color:#2D5BFF"/>
+      <stop offset="100%" style="stop-color:#1E3A8A"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer infinity loop / möbius strip representing privacy loop -->
+  <path 
+    d="M100 40 
+       C140 40, 165 65, 165 100 
+       C165 135, 140 160, 100 160 
+       C60 160, 35 135, 35 100 
+       C35 65, 60 40, 100 40"
+    fill="none" 
+    stroke="url(#loopyGrad)" 
+    stroke-width="8"
+    stroke-linecap="round"
+    opacity="0.3"
+  />
+  
+  <!-- Inner twisted loop - the "Loopy" signature -->
+  <path 
+    d="M70 80 
+       Q70 50, 100 50 
+       Q130 50, 130 80 
+       Q130 100, 100 100 
+       Q70 100, 70 120 
+       Q70 150, 100 150 
+       Q130 150, 130 120"
+    fill="none" 
+    stroke="url(#loopyGrad)" 
+    stroke-width="12"
+    stroke-linecap="round"
+    filter="url(#glow)"
+  />
+  
+  <!-- Privacy nodes at intersections -->
+  <circle cx="100" cy="50" r="8" fill="#2D5BFF"/>
+  <circle cx="100" cy="100" r="6" fill="#4F7AFF"/>
+  <circle cx="100" cy="150" r="8" fill="#2D5BFF"/>
+  
+  <!-- Glow dots -->
+  <circle cx="70" cy="80" r="4" fill="#4F7AFF" opacity="0.8"/>
+  <circle cx="130" cy="80" r="4" fill="#4F7AFF" opacity="0.8"/>
+  <circle cx="70" cy="120" r="4" fill="#4F7AFF" opacity="0.8"/>
+  <circle cx="130" cy="120" r="4" fill="#4F7AFF" opacity="0.8"/>
+</svg>
