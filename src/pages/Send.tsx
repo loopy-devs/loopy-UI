@@ -82,7 +82,7 @@ export default function Send() {
         return;
       }
       try {
-        const res = await fetch(`/api/prices/${selectedToken.mint}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/prices/${selectedToken.mint}`);
         const data = await res.json();
         setTokenPrice(data.price || data.usdPrice || 0);
       } catch (err) {
@@ -328,7 +328,7 @@ export default function Send() {
                 value={recipient}
                 onChange={handleRecipientChange}
                 disabled={isLoading}
-                className="font-mono text-base" // text-base (16px) prevents iOS zoom
+                className="font-mono text-base" 
               />
             </div>
 

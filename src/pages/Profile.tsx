@@ -35,7 +35,7 @@ export default function Profile() {
       if (!address) return;
       
       try {
-        const res = await fetch(`/api/referral/stats/${address}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/referral/stats/${address}`);
         if (res.ok) {
           const data = await res.json();
           setStats(data);

@@ -96,7 +96,7 @@ export default function Shield() {
         return;
       }
       try {
-        const res = await fetch(`/api/prices/${selectedToken.mint}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/prices/${selectedToken.mint}`);
         const data = await res.json();
         setTokenPrice(data.price || data.usdPrice || 0);
       } catch (err) {
