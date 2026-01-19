@@ -1,5 +1,3 @@
 [build]
-builder = "NIXPACKS"
-
-[deploy]
-startCommand = "node node_modules/serve/build/main.js dist -s -p $PORT"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
