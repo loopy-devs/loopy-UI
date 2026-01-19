@@ -363,10 +363,8 @@ export default function Profile() {
                 <div className="space-y-3">
                   {[
                     { action: 'Refer a friend', points: '+50 pts', color: 'text-green-400' },
-                    { action: 'First shield deposit', points: '+25 pts', color: 'text-brand' },
-                    { action: 'Private send', points: '+10 pts', color: 'text-cyan-400' },
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                    <div key={i} className="flex items-center justify-between py-2">
                       <span className="text-sm text-gray-400">{item.action}</span>
                       <span className={cn('text-sm font-semibold', item.color)}>{item.points}</span>
                     </div>
