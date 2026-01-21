@@ -12,7 +12,6 @@ import { TokenSelector, type SupportedToken } from '@/components/ui/TokenSelecto
 import { ProgressStepper, SuccessModal, type ProgressStep } from '@/components/ui/ProgressStepper';
 import { useShadowWire, TOKEN_CONFIG, type SupportedToken as ShadowToken } from '@/hooks/useShadowWire';
 import { useWalletTokens } from '@/hooks/useWalletTokens';
-import { useCacheStore } from '@/stores/cache';
 import { formatNumber, formatUSD } from '@/lib/format';
 import { cn } from '@/lib/cn';
 
@@ -263,13 +262,7 @@ export default function Shield() {
       // Step 3: Finalize
       setCurrentStep(3);
       
-      // IMPORTANT: Invalidate ALL cache to force fresh data
-      const { invalidateTokens, invalidateShielded, invalidateShadowWireBalances } = useCacheStore.getState();
-      invalidateTokens();
-      invalidateShielded();
-      invalidateShadowWireBalances();
-      
-      // Force refresh all balances immediately
+      // Force refresh all balances immediately - this updates cache with fresh data
       await Promise.all([
         refreshBalance(undefined, true), // Force refresh ALL shielded balances
         refreshWalletTokens(), // Refresh wallet tokens

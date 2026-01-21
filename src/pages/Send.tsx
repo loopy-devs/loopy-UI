@@ -10,7 +10,6 @@ import { AmountInput, Input } from '@/components/ui/Input';
 import { TokenSelector, type SupportedToken } from '@/components/ui/TokenSelector';
 import { ProgressStepper, SuccessModal, type ProgressStep } from '@/components/ui/ProgressStepper';
 import { useShadowWire, TOKEN_CONFIG, type SupportedToken as ShadowToken } from '@/hooks/useShadowWire';
-import { useCacheStore } from '@/stores/cache';
 import { formatNumber, formatUSD } from '@/lib/format';
 
 // Progress steps for sending (5 steps with 2 signatures clearly shown)
@@ -218,12 +217,7 @@ export default function Send() {
 
       console.log('[Send] Transfer result:', result);
 
-      // IMPORTANT: Invalidate ALL cache to force fresh data
-      const { invalidateShielded, invalidateShadowWireBalances } = useCacheStore.getState();
-      invalidateShielded();
-      invalidateShadowWireBalances();
-
-      // Force refresh ALL shielded balances immediately
+      // Force refresh ALL shielded balances immediately (no need to invalidate first)
       await refreshBalance(undefined, true);
 
       // Success!

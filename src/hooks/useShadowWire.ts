@@ -14,7 +14,7 @@ import('@radr/shadowwire').then((mod) => {
   ShadowWireClientClass = mod.ShadowWireClient || mod.default?.ShadowWireClient;
   initWASMFn = mod.initWASM;
   isWASMSupportedFn = mod.isWASMSupported;
-  console.log('[ShadowWire] SDK loaded, WASM supported:', isWASMSupportedFn?.());
+
 }).catch((err) => {
   console.error('Failed to load ShadowWire SDK:', err);
 });
@@ -87,10 +87,14 @@ export function useShadowWire(): ShadowWireHook {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [balances, setBalances] = useState<Record<SupportedToken, TokenBalance | null>>({
-    SOL: null,
-    USDC: null,
-    USD1: null,
+  
+  // Initialize balances from cache if available (avoids skeleton on subsequent visits)
+  const [balances, setBalances] = useState<Record<SupportedToken, TokenBalance | null>>(() => {
+    const cached = useCacheStore.getState().shadowWireBalances;
+    if (cached?.data) {
+      return cached.data as Record<SupportedToken, TokenBalance | null>;
+    }
+    return { SOL: null, USDC: null, USD1: null };
   });
   const initRef = useRef(false);
 
@@ -118,16 +122,16 @@ export function useShadowWire(): ShadowWireHook {
         
         // Initialize WASM for client-side proofs (required for transferWithClientProofs)
         if (isWASMSupportedFn?.()) {
-          console.log('[ShadowWire] Initializing WASM for client-side proofs...');
+      
           try {
             // Try with custom path first (for Vite), then default
             await initWASMFn?.('/wasm/settler_wasm_bg.wasm');
-            console.log('[ShadowWire] WASM initialized successfully');
+       
           } catch (wasmErr: any) {
-            console.warn('[ShadowWire] Custom WASM path failed, trying default:', wasmErr.message);
+       
             try {
               await initWASMFn?.();
-              console.log('[ShadowWire] WASM initialized with default path');
+            
             } catch (wasmErr2: any) {
               console.warn('[ShadowWire] WASM initialization failed (will use backend proofs):', wasmErr2.message);
             }
