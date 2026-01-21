@@ -7,6 +7,8 @@ import TokenList from '@/components/portfolio/TokenList';
 import ShieldedAssets from '@/components/portfolio/ShieldedAssets';
 import { useWalletTokens } from '@/hooks/useWalletTokens';
 import { useShieldedBalance } from '@/hooks/useShieldedBalance';
+import { useCacheStore } from '@/stores/cache';
+import { API_BASE_URL } from '@/config/constants';
 
 const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
@@ -15,17 +17,30 @@ export default function Dashboard() {
   const { tokens, totalUsdValue, isLoading: tokensLoading } = useWalletTokens();
   const { balance: shieldedBalance, isLoading: shieldedLoading } = useShieldedBalance();
   const [solPrice, setSolPrice] = useState(0);
+  const { tokenPrices, setTokenPrices } = useCacheStore();
   const hasFetchedPrice = useRef(false);
 
-  // Fetch SOL price using backend API (consistent with Send page)
+  // Fetch SOL price once on mount using backend API (like Send page)
   useEffect(() => {
     if (hasFetchedPrice.current) return;
+    
+    // Check cache first
+    const cachedPrice = tokenPrices?.data?.[SOL_MINT];
+    if (cachedPrice) {
+      setSolPrice(cachedPrice);
+      hasFetchedPrice.current = true;
+      return;
+    }
+
     hasFetchedPrice.current = true;
     
-    fetch(`${import.meta.env.VITE_API_URL || '/api'}/prices/${SOL_MINT}`)
+    // Fetch from backend API (same as Send page)
+    fetch(`${API_BASE_URL}/prices/${SOL_MINT}`)
       .then(res => res.json())
       .then(data => {
-        setSolPrice(data.price || data.usdPrice || 0);
+        const price = data.price || data.usdPrice || 0;
+        setSolPrice(price);
+        setTokenPrices({ [SOL_MINT]: price });
       })
       .catch(() => setSolPrice(0));
   }, []);

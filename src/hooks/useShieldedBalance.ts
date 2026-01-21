@@ -21,30 +21,37 @@ interface ShieldedBalance {
 
 export function useShieldedBalance() {
   const { address } = useAppKitAccount();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const hasFetchedRef = useRef(false);
   const isFetchingRef = useRef(false);
   
-  // Get store values - always call in same order, use stable selectors
-  const shieldedBalance = useCacheStore((state) => state.shieldedBalance);
+  // Initialize local balance state from cache IMMEDIATELY (synchronous)
+  const [localBalance, setLocalBalance] = useState<ShieldedBalance | null>(() => {
+    return useCacheStore.getState().shieldedBalance?.data || null;
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Get store functions
   const setShieldedBalance = useCacheStore((state) => state.setShieldedBalance);
   const invalidateShielded = useCacheStore((state) => state.invalidateShielded);
-
-  // Get display balance (cached data)
-  const displayBalance = shieldedBalance?.data || null;
   
-  // Use ref to track displayBalance for use in callback without dependency
-  const displayBalanceRef = useRef(displayBalance);
-  displayBalanceRef.current = displayBalance;
+  // Subscribe to cache changes to keep local state in sync
+  const cachedBalance = useCacheStore((state) => state.shieldedBalance);
+  
+  // Sync local state when cache updates (from other components)
+  useEffect(() => {
+    if (cachedBalance?.data) {
+      setLocalBalance(cachedBalance.data);
+    }
+  }, [cachedBalance]);
 
   const fetchBalance = useCallback(async (showLoader: boolean) => {
     if (!address) return;
-    if (isFetchingRef.current) return; // Prevent concurrent fetches
+    if (isFetchingRef.current) return;
     
     isFetchingRef.current = true;
 
-    if (showLoader && !displayBalanceRef.current) {
+    // Only show loader if we have no data at all
+    if (showLoader && !localBalance) {
       setIsLoading(true);
     }
 
@@ -73,6 +80,7 @@ export function useShieldedBalance() {
         totalUsd: 0,
       };
 
+      setLocalBalance(balance);
       setShieldedBalance(balance);
       setError(null);
     } catch (err: any) {
@@ -81,40 +89,30 @@ export function useShieldedBalance() {
       setIsLoading(false);
       isFetchingRef.current = false;
     }
-  }, [address, setShieldedBalance]);
+  }, [address, localBalance, setShieldedBalance]);
 
-  // Initial fetch on mount
+  // Fetch on mount only if no cached data
   useEffect(() => {
     if (!address) return;
-    if (hasFetchedRef.current) return;
-    hasFetchedRef.current = true;
-
-    if (!displayBalance) {
-      fetchBalance(true);
-    } else {
-      fetchBalance(false);
-    }
-  }, [address, displayBalance, fetchBalance]);
+    
+    // Background refresh - don't show loader if we already have data
+    fetchBalance(!localBalance);
+  }, [address]); // Only run on address change, not on every render
 
   // Auto-refresh every 30 seconds in background
   useEffect(() => {
     if (!address) return;
     
     const interval = setInterval(() => {
-      fetchBalance(false); // Background refresh, no loader
+      fetchBalance(false);
     }, REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
   }, [address, fetchBalance]);
 
-  // Reset on address change
-  useEffect(() => {
-    hasFetchedRef.current = false;
-  }, [address]);
-
   return {
-    balance: displayBalance,
-    isLoading: isLoading && !displayBalance,
+    balance: localBalance,
+    isLoading: isLoading && !localBalance,
     error,
     refresh: () => fetchBalance(false),
     invalidate: invalidateShielded,

@@ -88,11 +88,12 @@ export function useShadowWire(): ShadowWireHook {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Initialize balances from cache if available (avoids skeleton on subsequent visits)
+  // Initialize balances from cache immediately (prevents stale data on navigation)
   const [balances, setBalances] = useState<Record<SupportedToken, TokenBalance | null>>(() => {
-    const cached = useCacheStore.getState().shadowWireBalances;
-    if (cached?.data) {
-      return cached.data as Record<SupportedToken, TokenBalance | null>;
+    const cachedBalances = useCacheStore.getState().shadowWireBalances?.data;
+    if (cachedBalances) {
+      console.log('[ShadowWire] Initializing from cache:', cachedBalances);
+      return cachedBalances as Record<SupportedToken, TokenBalance | null>;
     }
     return { SOL: null, USDC: null, USD1: null };
   });
