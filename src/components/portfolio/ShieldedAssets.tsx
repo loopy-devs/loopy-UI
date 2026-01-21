@@ -22,9 +22,10 @@ interface ShieldedBalance {
 interface ShieldedAssetsProps {
   shieldedBalance: ShieldedBalance | null;
   isLoading: boolean;
+  solPrice?: number;
 }
 
-export default function ShieldedAssets({ shieldedBalance, isLoading }: ShieldedAssetsProps) {
+export default function ShieldedAssets({ shieldedBalance, isLoading, solPrice = 0 }: ShieldedAssetsProps) {
   const navigate = useNavigate();
   const hasShieldedAssets = shieldedBalance && (shieldedBalance.sol > 0 || shieldedBalance.tokens.length > 0);
 
@@ -91,7 +92,7 @@ export default function ShieldedAssets({ shieldedBalance, isLoading }: ShieldedA
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-white">{formatNumber(shieldedBalance.sol, 4)}</p>
-                  <p className="text-xs text-gray-500">{formatUSD(shieldedBalance.sol * 150)}</p>
+                  <p className="text-xs text-gray-500">{formatUSD(shieldedBalance.sol * solPrice)}</p>
                 </div>
               </motion.div>
             )}

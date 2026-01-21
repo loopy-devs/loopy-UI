@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { useAppKitAccount } from '@reown/appkit/react';
 import BalanceCard from '@/components/portfolio/BalanceCard';
 import ActionButtons from '@/components/portfolio/ActionButtons';
@@ -6,13 +7,37 @@ import TokenList from '@/components/portfolio/TokenList';
 import ShieldedAssets from '@/components/portfolio/ShieldedAssets';
 import { useWalletTokens } from '@/hooks/useWalletTokens';
 import { useShieldedBalance } from '@/hooks/useShieldedBalance';
+import { useCacheStore } from '@/stores/cache';
+
+const SOL_MINT = 'So11111111111111111111111111111111111111112';
 
 export default function Dashboard() {
   const { address } = useAppKitAccount();
   const { tokens, totalUsdValue, isLoading: tokensLoading } = useWalletTokens();
   const { balance: shieldedBalance, isLoading: shieldedLoading } = useShieldedBalance();
+  const [solPrice, setSolPrice] = useState(0);
+  const { tokenPrices, setTokenPrices } = useCacheStore();
 
-  const shieldedUsdValue = (shieldedBalance?.sol || 0) * 150;
+  // Fetch SOL price
+  useEffect(() => {
+    // Check cache first
+    if (tokenPrices?.data?.[SOL_MINT]) {
+      setSolPrice(tokenPrices.data[SOL_MINT]);
+      return;
+    }
+
+    // Fetch from Jupiter
+    fetch(`https://api.jup.ag/price/v2?ids=${SOL_MINT}`)
+      .then(res => res.json())
+      .then(data => {
+        const price = data?.data?.[SOL_MINT]?.price || 0;
+        setSolPrice(price);
+        setTokenPrices({ ...tokenPrices?.data, [SOL_MINT]: price });
+      })
+      .catch(() => setSolPrice(0));
+  }, [tokenPrices, setTokenPrices]);
+
+  const shieldedUsdValue = (shieldedBalance?.sol || 0) * solPrice;
 
   return (
     <div className="space-y-8">
@@ -61,6 +86,7 @@ export default function Dashboard() {
             <ShieldedAssets
               shieldedBalance={shieldedBalance}
               isLoading={shieldedLoading}
+              solPrice={solPrice}
             />
           </div>
         </div>
