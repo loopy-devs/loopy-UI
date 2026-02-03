@@ -10,6 +10,7 @@ import Receive from './pages/Receive';
 import Swap from './pages/Swap';
 import Profile from './pages/Profile';
 import TestSDK from './pages/TestSDK';
+import TestMagicBlock from './pages/TestMagicBlock';
 import AppShell from './components/layout/AppShell';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -84,6 +85,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <TestSDK />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/test-magicblock"
+        element={
+          <ProtectedRoute>
+            <TestMagicBlock />
           </ProtectedRoute>
         }
       />

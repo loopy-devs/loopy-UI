@@ -56,7 +56,7 @@ export function useShadowPay(): UseShadowPayReturn {
 
       // Check if ShadowPayClient is available
       if (!window.ShadowPayClient) {
-        console.log('[ShadowPay] Client not loaded yet, waiting...');
+      
         // Retry after a short delay
         setTimeout(initClient, 1000);
         return;
@@ -64,7 +64,7 @@ export function useShadowPay(): UseShadowPayReturn {
 
       try {
         setIsInitializing(true);
-        console.log('[ShadowPay] Initializing client...');
+  
         
         const client = new window.ShadowPayClient();
         await client.initialize(); // Loads ZK circuit artifacts (~5-10s)
@@ -72,9 +72,9 @@ export function useShadowPay(): UseShadowPayReturn {
         clientRef.current = client;
         setIsInitialized(true);
         setError(null);
-        console.log('[ShadowPay] Client initialized successfully!');
+     
       } catch (err: any) {
-        console.error('[ShadowPay] Initialization failed:', err);
+  
         setError(err.message || 'Failed to initialize ShadowPay client');
       } finally {
         setIsInitializing(false);
@@ -96,7 +96,7 @@ export function useShadowPay(): UseShadowPayReturn {
     }
 
     try {
-      console.log('[ShadowPay] Generating ZK proof...', { senderWallet, recipientWallet, amount });
+  
       
       const proofData = await clientRef.current.generatePaymentProof(
         senderWallet,
@@ -105,10 +105,10 @@ export function useShadowPay(): UseShadowPayReturn {
         'loopy-private-send' // Resource identifier
       );
       
-      console.log('[ShadowPay] Proof generated:', proofData);
+
       return proofData;
     } catch (err: any) {
-      console.error('[ShadowPay] Proof generation failed:', err);
+
       setError(err.message || 'Failed to generate proof');
       return null;
     }

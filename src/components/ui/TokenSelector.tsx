@@ -124,7 +124,7 @@ export function TokenSelector({
         setAllSupportedTokens(tokens);
         setSupportedTokens(tokens); // Cache the tokens
       } catch (err) {
-        console.error('Failed to fetch tokens:', err);
+       
       } finally {
         setIsLoading(false);
       }
@@ -171,7 +171,7 @@ export function TokenSelector({
         setPrices(normalizedPrices);
         setTokenPrices(normalizedPrices); // Cache prices
       } catch (err) {
-        console.error('Failed to fetch prices:', err);
+       
       }
     };
 
@@ -429,7 +429,7 @@ export function useSupportedTokens() {
         const { data } = await tokensAPI.getSupported();
         setTokens(data.tokens || []);
       } catch (err) {
-        console.error('Failed to fetch supported tokens:', err);
+      
       } finally {
         setIsLoading(false);
       }

@@ -37,7 +37,15 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
-    allowedHosts: ['loopy.cash', '.ngrok-free.app', '.ngrok.app', 'localhost'],
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      'loopy.cash',
+      'www.loopy.cash',
+      '.ngrok-free.app',
+      '.ngrok.app',
+      '.railway.app',
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:3001',

@@ -85,7 +85,7 @@ export function useAuth() {
         throw new Error('Registration failed');
       }
     } catch (err: any) {
-      console.error('Registration error:', err);
+  
       setError(err.message || 'Failed to register');
     } finally {
       setLoading(false);
