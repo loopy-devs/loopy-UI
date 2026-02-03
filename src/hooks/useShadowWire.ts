@@ -392,8 +392,9 @@ export function useShadowWire(): ShadowWireHook {
           sender_wallet: address,
           recipient_wallet: recipient,
           token,
-          amount: amountSmallestUnit, // Required field!
+          amount: amountSmallestUnit,
           nonce: proofResult.nonce,
+          proof_bytes: proofResult.proof_bytes, // Required from uploadProof!
           relayer_fee: relayerFee,
         }, walletObj); // Pass wallet as 2nd argument!
       } else {
@@ -402,8 +403,9 @@ export function useShadowWire(): ShadowWireHook {
           sender_wallet: address,
           recipient_wallet: recipient,
           token,
-          amount: amountSmallestUnit, // Required field!
+          amount: amountSmallestUnit,
           nonce: proofResult.nonce,
+          proof_bytes: proofResult.proof_bytes, // Required from uploadProof!
           relayer_fee: relayerFee,
         }, walletObj); // Pass wallet as 2nd argument!
       }
