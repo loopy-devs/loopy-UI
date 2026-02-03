@@ -384,6 +384,11 @@ export function useShadowWire(): ShadowWireHook {
       }, walletObj); // Pass wallet as 2nd argument!
       
       console.log('[ShadowWire] Proof uploaded:', proofResult);
+      console.log('[ShadowWire] Proof fields:', Object.keys(proofResult));
+      
+      // Get proof_bytes - might be named differently
+      const proof_bytes = proofResult.proof_bytes || proofResult.proof || proofResult.proofBytes;
+      console.log('[ShadowWire] proof_bytes value:', proof_bytes);
       
       // Step 2: Execute transfer WITH wallet signature
       if (type === 'internal') {
@@ -394,7 +399,7 @@ export function useShadowWire(): ShadowWireHook {
           token,
           amount: amountSmallestUnit,
           nonce: proofResult.nonce,
-          proof_bytes: proofResult.proof_bytes, // Required from uploadProof!
+          proof_bytes,
           relayer_fee: relayerFee,
         }, walletObj); // Pass wallet as 2nd argument!
       } else {
@@ -405,7 +410,7 @@ export function useShadowWire(): ShadowWireHook {
           token,
           amount: amountSmallestUnit,
           nonce: proofResult.nonce,
-          proof_bytes: proofResult.proof_bytes, // Required from uploadProof!
+          proof_bytes,
           relayer_fee: relayerFee,
         }, walletObj); // Pass wallet as 2nd argument!
       }
